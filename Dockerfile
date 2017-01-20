@@ -19,4 +19,6 @@ ADD restore_latest.sh /restore_latest.sh
 
 RUN chmod +x *.sh
 
+HEALTHCHECK --interval=5s --timeout=3s CMD pgrep cron || exit 1
+
 CMD ["/run.sh"]
