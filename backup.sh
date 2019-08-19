@@ -15,4 +15,10 @@ then
 fi
 
 # Upload the backup to S3 with timestamp
-/usr/local/bin/aws s3 --region $AWS_DEFAULT_REGION cp $tarball s3://$S3_BUCKET_NAME/$tarball
+if [[ -z "${KMS_KEY_ID}" ]]; then
+  echo "NOT using encyption."
+  /usr/local/bin/aws s3 --region $AWS_DEFAULT_REGION cp $tarball s3://$S3_BUCKET_NAME/$tarball
+else
+  echo "IS using encyption."
+  /usr/local/bin/aws s3 --region $AWS_DEFAULT_REGION cp $tarball s3://$S3_BUCKET_NAME/$tarball --sse aws:kms --sse-kms-key-id $KMS_KEY_ID
+fi
